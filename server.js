@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-
+const router = express.Router();
 const app = express();
 app.use(express.json());
 
@@ -29,7 +29,7 @@ app.use((err, req, res, next) => {
 });
 
 // Route d'accueil
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
     res.send('🎬 Bienvenue au CineClub API !');
 });
 
