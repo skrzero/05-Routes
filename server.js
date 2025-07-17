@@ -4,6 +4,8 @@ const path = require('path');
 const router = express.Router();
 const app = express();
 app.use(express.json());
+const routerFilms = require('./router/films.js')
+app.use(routerFilms)
 
 // Charger les fichiers de données
 let films = require('./data/films.json');
@@ -34,7 +36,7 @@ router.get('/', (req, res) => {
 });
 
 // GET /films — tous les films
-app.get('/films', (req, res) => {
+router.get('/films', (req, res) => {
     res.json(films);
 });
 
