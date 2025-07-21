@@ -1,0 +1,217 @@
+openapi: 3.0.0
+info:
+  title: API CineClub
+  description: API de gestion des films, réalisateurs et projections du CineClub
+  version: "1.0.0"
+servers:
+  - url: http://localhost:3000
+    description: Serveur local de développement
+
+paths:
+  /:
+    get:
+      summary: Page d'accueil de l'API
+      responses:
+        '200':
+          description: Message de bienvenue
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 🎬 Bienvenue au CineClub API !
+
+  /films:
+    get:
+      summary: Liste tous les films
+      responses:
+        '200':
+          description: Liste des films
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+
+    post:
+      summary: Ajoute un nouveau film
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FilmInput'
+      responses:
+        '201':
+          description: Film ajouté avec succès
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  film:
+                    $ref: '#/components/schemas/Film'
+
+  /films/{id}:
+    get:
+      summary: Récupère les détails d'un film par ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Détails du film
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Film'
+        '404':
+          description: Film introuvable
+
+    patch:
+      summary: Modifie le titre d'un film
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                titre:
+                  type: string
+      responses:
+        '200':
+          description: Film mis à jour
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  film:
+                    $ref: '#/components/schemas/Film'
+        '404':
+          description: Film non trouvé
+
+    delete:
+      summary: Supprime un film
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Film supprimé avec succès
+        '404':
+          description: Film non trouvé
+
+  /realisateurs:
+    get:
+      summary: Liste des réalisateurs
+      responses:
+        '200':
+          description: Liste des réalisateurs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Realisateur'
+                  
+  /ping:
+    get:
+      summary: Vérifie si l'API est vivante
+      responses:
+        '200':
+          description: API répond avec pong
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: pong
+
+components:
+  schemas:
+    Film:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        titre:
+          type: string
+          example: Inception
+        annee_sortie:
+          type: integer
+          example: 2010
+        duree_minutes:
+          type: integer
+          example: 148
+        note_critique:
+          type: number
+          format: float
+          example: 8.8
+        pays_origine:
+          type: string
+          example: USA
+        id_realisateur:
+          type: integer
+          example: 1
+
+    FilmInput:
+      type: object
+      required:
+        - id
+        - titre
+      properties:
+        id:
+          type: integer
+          example: 3
+        titre:
+          type: string
+          example: Nouveau film
+        annee_sortie:
+          type: integer
+        duree_minutes:
+          type: integer
+        note_critique:
+          type: number
+          format: float
+        pays_origine:
+          type: string
+        id_realisateur:
+          type: integer
+
+    Realisateur:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nom:
+          type: string
+          example: Nolan
+        prenom:
+          type: string
+          example: Christopher
+        date_naissance:
+          type: string
+          format: date
+          example: 1970-07-30
