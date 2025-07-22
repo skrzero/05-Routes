@@ -6,6 +6,26 @@ const path = require('path');
 const router = express.Router();
 const app = express();
 app.use(express.json());
+const mysql = require('mysql2');
+
+
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user : 'root',
+    password: 'root',
+    database: 'my_database'
+});
+
+connection.connect(err=>{
+    if(err) throw err;
+    console.log('connect to my sql');
+});
+
+
+
+
+
+
 const routerFilms = require('./router/films.js')
 app.use(routerFilms)
 
